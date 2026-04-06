@@ -1,11 +1,20 @@
+import type { Session } from '@supabase/supabase-js';
 import { useEffect } from 'react';
+import { IS_MOCK } from '../lib/mockData';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/authStore';
+
+const MOCK_SESSION = { user: { id: 'mock-user', email: 'mock@test.com' } } as Session;
 
 export function useAuthListener() {
   const setSession = useAuthStore((s) => s.setSession);
 
   useEffect(() => {
+    if (IS_MOCK) {
+      setSession(MOCK_SESSION);
+      return;
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });

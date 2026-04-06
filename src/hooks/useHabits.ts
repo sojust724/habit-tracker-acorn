@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createHabit, deleteHabit, fetchHabits, updateHabit } from '../api/habits';
+import { IS_MOCK, MOCK_HABITS } from '../lib/mockData';
 import type { CreateHabitInput, Habit, UpdateHabitInput } from '../types/habit';
 
 export const HABITS_KEY = ['habits'] as const;
@@ -7,7 +8,7 @@ export const HABITS_KEY = ['habits'] as const;
 export function useHabits() {
   return useQuery({
     queryKey: HABITS_KEY,
-    queryFn: fetchHabits,
+    queryFn: IS_MOCK ? () => Promise.resolve(MOCK_HABITS) : fetchHabits,
   });
 }
 
